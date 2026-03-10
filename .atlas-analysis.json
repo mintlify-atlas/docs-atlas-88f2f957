@@ -1,0 +1,55 @@
+{
+  "projectType": "general",
+  "projectName": "MergeSort",
+  "projectDescription": "Educational Java implementation demonstrating the merge sort algorithm with step-by-step visualization",
+  "theme": "linden",
+  "primaryColor": "#2563eb",
+  "lightColor": "#60a5fa",
+  "darkColor": "#1e40af",
+  "navigation": {
+    "groups": [
+      {
+        "group": "Getting Started",
+        "pages": [
+          "introduction",
+          "quickstart"
+        ]
+      },
+      {
+        "group": "Algorithm",
+        "pages": [
+          "algorithm/overview",
+          "algorithm/how-it-works",
+          "algorithm/complexity"
+        ]
+      },
+      {
+        "group": "Implementation",
+        "pages": [
+          "implementation/code-structure",
+          "implementation/api-reference",
+          "implementation/examples"
+        ]
+      },
+      {
+        "group": "Resources",
+        "pages": [
+          "resources/learning",
+          "resources/related-algorithms"
+        ]
+      }
+    ]
+  },
+  "keyFeatures": [
+    "Complete merge sort implementation in Java",
+    "Step-by-step visualization of sorting process",
+    "Detailed code comments explaining algorithm logic",
+    "Configurable array input and random generation",
+    "Educational tool for data structures course"
+  ],
+  "publicApiSurface": [
+    "mergeSort(int[] arreglo)",
+    "mergeSortReordenamiento(int[] originalArreglo, int[] depositoArreglo, int indiceInicio, int indiceFin)",
+    "merge(int[] originalArreglo, int[] depositoArreglo, int indiceInicio, int mitadArreglo, int indiceFin)"
+  ]
+}
