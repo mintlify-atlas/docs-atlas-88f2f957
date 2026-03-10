@@ -1,0 +1,225 @@
+---
+title: 'Code Structure'
+description: 'Understanding the architecture and organization of the MergeSort implementation'
+---
+
+## Overview
+
+The MergeSort implementation is organized as a single Java class with three core methods that work together to implement the divide-and-conquer sorting algorithm. The design emphasizes clarity and educational value while maintaining efficiency.
+
+### Class Architecture
+
+```
+MergeSort
+│
+├── mergeSort(int[] arreglo)
+│   └── Entry point and validation
+│
+├── mergeSortReordenamiento(int[], int[], int, int)
+│   └── Recursive division and coordination
+│
+└── merge(int[], int[], int, int, int)
+    └── Merging sorted subarrays
+```
+
+## Core Components
+
+### 1. Entry Point: `mergeSort()`
+
+<Card title="mergeSort()" icon="door-open">
+  The public interface that validates input and initializes the sorting process.
+</Card>
+
+**Location:** `MergeSort.java:6-21`
+
+**Responsibilities:**
+- Validates that the array is not null
+- Handles edge cases (arrays with 0 or 1 element)
+- Creates the temporary storage array (`depositoArreglo`)
+- Delegates to the recursive sorting method
+
+```java
+public static void mergeSort(int[] arreglo) {
+    if (arreglo == null || arreglo.length <= 1) {
+        return;
+    }
+    
+    int[] depositoArreglo = new int[arreglo.length];
+    mergeSortReordenamiento(arreglo, depositoArreglo, 0, arreglo.length - 1);
+}
+```
+
+<Note>
+  The method uses an early return pattern for base cases, making the code more readable and efficient.
+</Note>
+
+### 2. Recursive Division: `mergeSortReordenamiento()`
+
+<Card title="mergeSortReordenamiento()" icon="split">
+  The recursive engine that divides the array into smaller subarrays and coordinates their merging.
+</Card>
+
+**Location:** `MergeSort.java:23-52`
+
+**Responsibilities:**
+- Implements the divide step of divide-and-conquer
+- Calculates the midpoint of the current subarray
+- Recursively sorts the left and right halves
+- Calls `merge()` to combine sorted halves
+- Provides visual feedback of the sorting process
+
+```java
+private static void mergeSortReordenamiento(int[] originalArreglo, 
+                                           int[] depositoArreglo, 
+                                           int indiceInicio,
+                                           int indiceFin) {
+    if (indiceInicio >= indiceFin) {
+        return;
+    }
+    
+    int mitadArreglo = indiceInicio + (indiceFin - indiceInicio) / 2;
+    mergeSortReordenamiento(originalArreglo, depositoArreglo, indiceInicio, mitadArreglo);
+    mergeSortReordenamiento(originalArreglo, depositoArreglo, mitadArreglo + 1, indiceFin);
+    merge(originalArreglo, depositoArreglo, indiceInicio, mitadArreglo, indiceFin);
+    
+    // Visual feedback
+    System.out.println("Proceso de ordenamiento en subarreglo: " + indiceInicio + " a " + indiceFin);
+}
+```
+
+<Tip>
+  The midpoint calculation `indiceInicio + (indiceFin - indiceInicio) / 2` prevents integer overflow that could occur with `(indiceInicio + indiceFin) / 2`.
+</Tip>
+
+### 3. Merging Logic: `merge()`
+
+<Card title="merge()" icon="code-merge">
+  The conquer step that combines two sorted subarrays into a single sorted sequence.
+</Card>
+
+**Location:** `MergeSort.java:54-103`
+
+**Responsibilities:**
+- Copies the current section to the temporary array
+- Compares elements from both halves
+- Places elements in sorted order back into the original array
+- Handles remaining elements from the left half
+
+```java
+private static void merge(int[] originalArreglo, 
+                         int[] depositoArreglo, 
+                         int indiceInicio, 
+                         int mitadArreglo,
+                         int indiceFin) {
+    // Copy section to temporary array
+    for (int i = indiceInicio; i <= indiceFin; i++) {
+        depositoArreglo[i] = originalArreglo[i];
+    }
+    
+    // Merge logic with three pointers
+    int contadorPrimerArreglo = indiceInicio;
+    int contadorSegundoArreglo = mitadArreglo + 1;
+    int acompladorArreglos = indiceInicio;
+    
+    // Compare and merge...
+}
+```
+
+## Data Flow
+
+<Steps>
+  <Step title="Initialization">
+    `mergeSort()` creates a temporary array and validates input
+  </Step>
+  
+  <Step title="Division">
+    `mergeSortReordenamiento()` recursively divides the array until subarrays have 1 element
+  </Step>
+  
+  <Step title="Merging">
+    `merge()` combines sorted subarrays, working bottom-up from smallest to largest
+  </Step>
+  
+  <Step title="Completion">
+    The original array is sorted in-place, though a temporary array is used during merging
+  </Step>
+</Steps>
+
+## Algorithm Flow Diagram
+
+```
+Initial Array: [10, 5, 8, 9, 2, 3, 1, 6]
+
+                    [10, 5, 8, 9, 2, 3, 1, 6]
+                            ↓ divide
+                [10, 5, 8, 9]      [2, 3, 1, 6]
+                    ↓ divide           ↓ divide
+            [10, 5]   [8, 9]      [2, 3]   [1, 6]
+               ↓         ↓           ↓         ↓
+            [10] [5]  [8] [9]    [2] [3]  [1] [6]
+               ↓ merge   ↓ merge    ↓ merge   ↓ merge
+            [5, 10]   [8, 9]      [2, 3]   [1, 6]
+                ↓ merge               ↓ merge
+            [5, 8, 9, 10]         [1, 2, 3, 6]
+                        ↓ merge
+                [1, 2, 3, 5, 6, 8, 9, 10]
+```
+
+## Key Design Decisions
+
+<AccordionGroup>
+  <Accordion title="Why use a separate temporary array?">
+    The `depositoArreglo` temporary array prevents data loss during merging. When comparing elements from two halves, we need the original values preserved. The temporary array holds a copy of the current section being merged.
+  </Accordion>
+  
+  <Accordion title="Why make helper methods private?">
+    Both `mergeSortReordenamiento()` and `merge()` are implementation details. Only `mergeSort()` needs to be public, providing a clean API that hides complexity.
+  </Accordion>
+  
+  <Accordion title="Why print during sorting?">
+    The implementation includes educational output (line 47-51) that shows the progressive sorting of subarrays. This helps visualize the divide-and-conquer process.
+  </Accordion>
+  
+  <Accordion title="Why handle only the left half's remaining elements?">
+    After the main merging loop, only the left half might have remaining elements (line 96-102). The right half's remaining elements are already in their correct positions in the original array, so no additional copying is needed.
+  </Accordion>
+</AccordionGroup>
+
+## Variable Naming Convention
+
+The implementation uses Spanish-influenced variable names:
+
+| Variable | Translation | Purpose |
+|----------|-------------|----------|
+| `arreglo` | array | The array being sorted |
+| `depositoArreglo` | deposit/temporary array | Temporary storage for merging |
+| `originalArreglo` | original array | Reference to the source array |
+| `indiceInicio` | start index | Beginning of current subarray |
+| `indiceFin` | end index | End of current subarray |
+| `mitadArreglo` | middle of array | Midpoint for division |
+| `acompladorArreglos` | coupler/combiner | Index for merged result |
+
+<Info>
+  Understanding these naming conventions helps in reading and maintaining the code.
+</Info>
+
+## Memory Management
+
+The implementation uses **O(n)** additional space:
+
+- One temporary array of the same size as the input
+- The temporary array is allocated once at the start
+- Recursive calls use stack space: **O(log n)**
+- Total space complexity: **O(n + log n) = O(n)**
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="API Reference" icon="book" href="/implementation/api-reference">
+    Detailed documentation of all methods and parameters
+  </Card>
+  
+  <Card title="Examples" icon="code" href="/implementation/examples">
+    Practical usage examples and output demonstrations
+  </Card>
+</CardGroup>

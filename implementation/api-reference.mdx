@@ -1,0 +1,471 @@
+---
+title: 'API Reference'
+description: 'Complete reference documentation for all MergeSort methods'
+---
+
+## Public Methods
+
+### mergeSort
+
+<ParamField path="mergeSort" type="public static void">
+  The main entry point for sorting an integer array using the merge sort algorithm.
+</ParamField>
+
+**Signature:**
+```java
+public static void mergeSort(int[] arreglo)
+```
+
+**Location:** `MergeSort.java:6-21`
+
+#### Parameters
+
+<ParamField path="arreglo" type="int[]" required>
+  The integer array to be sorted. The array is sorted in-place in ascending order.
+  
+  **Valid inputs:**
+  - Any integer array with length ≥ 0
+  - Can contain duplicates
+  - Can contain negative numbers
+  - `null` is handled gracefully (method returns immediately)
+</ParamField>
+
+#### Return Value
+
+<ResponseField name="return" type="void">
+  This method does not return a value. The input array is modified in-place to be sorted in ascending order.
+</ResponseField>
+
+#### Behavior
+
+<Accordion title="Edge Cases">
+  The method handles several edge cases automatically:
+  
+  - **Null array:** Returns immediately without error
+  - **Empty array:** Returns immediately (already sorted)
+  - **Single element:** Returns immediately (already sorted)
+  - **Duplicate elements:** Handles correctly with stable sorting
+</Accordion>
+
+<Accordion title="Algorithm Steps">
+  1. Validates that the array is not null and has more than one element
+  2. Creates a temporary array of the same size for merging operations
+  3. Calls `mergeSortReordenamiento()` with initial bounds (0 to length-1)
+  4. The original array is sorted in-place upon completion
+</Accordion>
+
+#### Example Usage
+
+```java
+int[] numbers = {10, 5, 8, 9, 2, 3, 1, 6};
+MergeSort.mergeSort(numbers);
+// numbers is now: {1, 2, 3, 5, 6, 8, 9, 10}
+```
+
+<CodeGroup>
+
+```java Basic Usage
+int[] arr = {64, 34, 25, 12, 22, 11, 90};
+MergeSort.mergeSort(arr);
+System.out.println(Arrays.toString(arr));
+// Output: [11, 12, 22, 25, 34, 64, 90]
+```
+
+```java With Duplicates
+int[] arr = {5, 2, 8, 2, 9, 1, 5, 5};
+MergeSort.mergeSort(arr);
+System.out.println(Arrays.toString(arr));
+// Output: [1, 2, 2, 5, 5, 5, 8, 9]
+```
+
+```java With Negatives
+int[] arr = {-5, 10, -3, 0, 8, -1};
+MergeSort.mergeSort(arr);
+System.out.println(Arrays.toString(arr));
+// Output: [-5, -3, -1, 0, 8, 10]
+```
+
+```java Edge Case - Single Element
+int[] arr = {42};
+MergeSort.mergeSort(arr);
+System.out.println(Arrays.toString(arr));
+// Output: [42]
+```
+
+</CodeGroup>
+
+#### Time Complexity
+
+<ResponseField name="Best Case" type="O(n log n)">
+  Even if the array is already sorted, merge sort always divides and merges.
+</ResponseField>
+
+<ResponseField name="Average Case" type="O(n log n)">
+  The array is divided log n times, and each merge operation is O(n).
+</ResponseField>
+
+<ResponseField name="Worst Case" type="O(n log n)">
+  Merge sort has consistent performance regardless of input order.
+</ResponseField>
+
+#### Space Complexity
+
+<ResponseField name="Additional Space" type="O(n)">
+  Requires a temporary array of the same size as the input array for merging.
+</ResponseField>
+
+<ResponseField name="Call Stack" type="O(log n)">
+  The recursive calls create a stack depth of log n levels.
+</ResponseField>
+
+---
+
+## Private Methods
+
+<Warning>
+  The following methods are implementation details and should not be called directly. They are documented here for educational purposes and code understanding.
+</Warning>
+
+### mergeSortReordenamiento
+
+<ParamField path="mergeSortReordenamiento" type="private static void">
+  Recursive method that implements the divide-and-conquer strategy, splitting the array and coordinating the merge operations.
+</ParamField>
+
+**Signature:**
+```java
+private static void mergeSortReordenamiento(int[] originalArreglo, 
+                                           int[] depositoArreglo, 
+                                           int indiceInicio,
+                                           int indiceFin)
+```
+
+**Location:** `MergeSort.java:23-52`
+
+#### Parameters
+
+<ParamField path="originalArreglo" type="int[]" required>
+  The original array being sorted. This array is modified in-place.
+</ParamField>
+
+<ParamField path="depositoArreglo" type="int[]" required>
+  A temporary array of the same size used for merging operations. Must have the same length as `originalArreglo`.
+</ParamField>
+
+<ParamField path="indiceInicio" type="int" required>
+  The starting index (inclusive) of the subarray to sort. Valid range: 0 to array.length - 1.
+</ParamField>
+
+<ParamField path="indiceFin" type="int" required>
+  The ending index (inclusive) of the subarray to sort. Valid range: indiceInicio to array.length - 1.
+</ParamField>
+
+#### Behavior
+
+**Base Case:**
+```java
+if (indiceInicio >= indiceFin) {
+    return;  // Subarray has 0 or 1 element, already sorted
+}
+```
+
+**Recursive Case:**
+1. Calculate the midpoint: `mitadArreglo = indiceInicio + (indiceFin - indiceInicio) / 2`
+2. Recursively sort the left half: indices `[indiceInicio, mitadArreglo]`
+3. Recursively sort the right half: indices `[mitadArreglo + 1, indiceFin]`
+4. Merge the two sorted halves using the `merge()` method
+5. Print the current state of the subarray (educational output)
+
+<Tip>
+  The midpoint calculation avoids integer overflow by using `indiceInicio + (indiceFin - indiceInicio) / 2` instead of `(indiceInicio + indiceFin) / 2`.
+</Tip>
+
+**Visual Output:**
+
+This method prints progress information to the console:
+```
+Proceso de ordenamiento en subarreglo: 0 a 1
+5 10
+Proceso de ordenamiento en subarreglo: 2 a 3
+8 9
+Proceso de ordenamiento en subarreglo: 0 a 3
+5 8 9 10
+...
+```
+
+---
+
+### merge
+
+<ParamField path="merge" type="private static void">
+  Merges two sorted subarrays into a single sorted subarray within the original array.
+</ParamField>
+
+**Signature:**
+```java
+private static void merge(int[] originalArreglo, 
+                         int[] depositoArreglo, 
+                         int indiceInicio, 
+                         int mitadArreglo,
+                         int indiceFin)
+```
+
+**Location:** `MergeSort.java:54-103`
+
+#### Parameters
+
+<ParamField path="originalArreglo" type="int[]" required>
+  The original array containing the two sorted subarrays to be merged. Modified in-place.
+</ParamField>
+
+<ParamField path="depositoArreglo" type="int[]" required>
+  Temporary storage array used during the merge operation. Must have the same length as `originalArreglo`.
+</ParamField>
+
+<ParamField path="indiceInicio" type="int" required>
+  The starting index of the first sorted subarray.
+</ParamField>
+
+<ParamField path="mitadArreglo" type="int" required>
+  The ending index of the first sorted subarray. The second subarray starts at `mitadArreglo + 1`.
+</ParamField>
+
+<ParamField path="indiceFin" type="int" required>
+  The ending index of the second sorted subarray.
+</ParamField>
+
+#### Behavior
+
+The merge operation works in three phases:
+
+<Steps>
+  <Step title="Copy to Temporary Array">
+    Copy the entire range `[indiceInicio, indiceFin]` from `originalArreglo` to `depositoArreglo`.
+    
+    ```java
+    for (int i = indiceInicio; i <= indiceFin; i++) {
+        depositoArreglo[i] = originalArreglo[i];
+    }
+    ```
+  </Step>
+  
+  <Step title="Merge Sorted Halves">
+    Use three pointers to merge the two sorted halves:
+    - `contadorPrimerArreglo`: Tracks position in left half `[indiceInicio, mitadArreglo]`
+    - `contadorSegundoArreglo`: Tracks position in right half `[mitadArreglo + 1, indiceFin]`
+    - `acompladorArreglos`: Tracks where to place the next element in `originalArreglo`
+    
+    Compare elements from both halves and place the smaller one in the result.
+  </Step>
+  
+  <Step title="Copy Remaining Elements">
+    After one half is exhausted, copy any remaining elements from the left half. The right half's remaining elements are already in correct positions.
+  </Step>
+</Steps>
+
+#### Three-Pointer Algorithm
+
+<CodeGroup>
+
+```java Initialization
+int contadorPrimerArreglo = indiceInicio;      // Start of left half
+int contadorSegundoArreglo = mitadArreglo + 1; // Start of right half
+int acompladorArreglos = indiceInicio;         // Output position
+```
+
+```java Main Merge Loop
+while (contadorPrimerArreglo <= mitadArreglo && 
+       contadorSegundoArreglo <= indiceFin) {
+    if (depositoArreglo[contadorPrimerArreglo] <= 
+        depositoArreglo[contadorSegundoArreglo]) {
+        originalArreglo[acompladorArreglos] = 
+            depositoArreglo[contadorPrimerArreglo];
+        contadorPrimerArreglo++;
+    } else {
+        originalArreglo[acompladorArreglos] = 
+            depositoArreglo[contadorSegundoArreglo];
+        contadorSegundoArreglo++;
+    }
+    acompladorArreglos++;
+}
+```
+
+```java Handle Remaining Elements
+while (contadorPrimerArreglo <= mitadArreglo) {
+    originalArreglo[acompladorArreglos] = 
+        depositoArreglo[contadorPrimerArreglo];
+    contadorPrimerArreglo++;
+    acompladorArreglos++;
+}
+// Note: No need to copy remaining right half elements
+```
+
+</CodeGroup>
+
+<Info>
+  **Why no second cleanup loop?** If the right half has remaining elements after the main merge loop, they're already in their correct positions in `originalArreglo`. Only the left half needs explicit copying.
+</Info>
+
+#### Example Merge Operation
+
+**Before merge:**
+```
+originalArreglo: [5, 10, 8, 9, ...]
+                  ^^^^^ ^^^^^  
+                  left  right (both sorted)
+```
+
+**After copying to depositoArreglo:**
+```
+depositoArreglo: [5, 10, 8, 9, ...]
+```
+
+**Merge process:**
+```
+Compare: 5 vs 8  → Choose 5  → [5, ...]
+Compare: 10 vs 8 → Choose 8  → [5, 8, ...]
+Compare: 10 vs 9 → Choose 9  → [5, 8, 9, ...]
+Left remaining: 10           → [5, 8, 9, 10, ...]
+```
+
+---
+
+## Main Method
+
+### main
+
+<ParamField path="main" type="public static void">
+  Entry point for testing and demonstrating the merge sort implementation.
+</ParamField>
+
+**Signature:**
+```java
+public static void main(String[] args)
+```
+
+**Location:** `MergeSort.java:105-139`
+
+#### Current Implementation
+
+The main method demonstrates sorting with a predefined array:
+
+```java
+int[] originalArreglo = {10, 5, 8, 9, 2, 3, 1, 6};
+mergeSort(originalArreglo);
+for (int num : originalArreglo) {
+    System.out.print(num + " ");
+}
+```
+
+#### Alternative Implementation (Commented Out)
+
+The code includes an alternative implementation using random arrays:
+
+<Accordion title="Random Array Generation Code">
+  ```java
+  Random numAzar = new Random();
+  int cantidadElementos = numAzar.nextInt(10) + 1; // 1 to 10 elements
+  int[] arreglo = new int[cantidadElementos];
+  
+  for (int i = 0; i < cantidadElementos; i++) {
+      arreglo[i] = numAzar.nextInt(100) + 1; // Numbers 1 to 100
+  }
+  
+  System.out.println("Arreglo original:");
+  for (int num : arreglo) {
+      System.out.print(num + " ");
+  }
+  System.out.println();
+  
+  mergeSort(arreglo);
+  
+  System.out.println("Arreglo ordenado:");
+  for (int num : arreglo) {
+      System.out.print(num + " ");
+  }
+  ```
+</Accordion>
+
+To use the random array version, uncomment lines 117-138 and comment out lines 108-115.
+
+---
+
+## Complete Class Summary
+
+<CardGroup cols={2}>
+  <Card title="Public Interface" icon="globe">
+    **1 public method**
+    
+    - `mergeSort(int[] arreglo)`
+    
+    This is the only method you need to call.
+  </Card>
+  
+  <Card title="Private Helpers" icon="lock">
+    **2 private methods**
+    
+    - `mergeSortReordenamiento(...)` - Division
+    - `merge(...)` - Merging
+    
+    These are implementation details.
+  </Card>
+  
+  <Card title="Entry Point" icon="play">
+    **1 main method**
+    
+    - `main(String[] args)`
+    
+    For testing and demonstration.
+  </Card>
+  
+  <Card title="No State" icon="database">
+    **0 instance variables**
+    
+    All methods are static - no object instantiation needed.
+  </Card>
+</CardGroup>
+
+## Usage Patterns
+
+<Tabs>
+  <Tab title="Direct Usage">
+    ```java
+    // No need to instantiate the class
+    int[] data = {5, 2, 8, 1, 9};
+    MergeSort.mergeSort(data);
+    // data is now sorted
+    ```
+  </Tab>
+  
+  <Tab title="Integration">
+    ```java
+    public class DataProcessor {
+        public void processData(int[] rawData) {
+            // Sort the data before processing
+            MergeSort.mergeSort(rawData);
+            
+            // Continue with processing
+            // ...
+        }
+    }
+    ```
+  </Tab>
+  
+  <Tab title="Testing">
+    ```java
+    @Test
+    public void testMergeSort() {
+        int[] input = {5, 2, 8, 1, 9};
+        int[] expected = {1, 2, 5, 8, 9};
+        
+        MergeSort.mergeSort(input);
+        
+        assertArrayEquals(expected, input);
+    }
+    ```
+  </Tab>
+</Tabs>
+
+<Note>
+  For practical examples and output demonstrations, see the [Examples](/implementation/examples) page.
+</Note>

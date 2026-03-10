@@ -1,0 +1,302 @@
+---
+title: 'How Merge Sort Works'
+description: 'Step-by-step explanation of the merge sort algorithm with code examples'
+---
+
+## Algorithm Walkthrough
+
+Merge Sort operates in two distinct phases: **dividing** the array into smaller pieces, and **merging** those pieces back together in sorted order.
+
+<Info>
+  This implementation includes debug output that shows the sorting process in action at `MergeSort.java:47-51`
+</Info>
+
+## Phase 1: The Divide Phase
+
+The algorithm recursively splits the array into halves until each subarray contains only one element.
+
+### Finding the Middle Point
+
+The implementation calculates the midpoint carefully to avoid integer overflow:
+
+```java
+int mitadArreglo = indiceInicio + (indiceFin - indiceInicio) / 2;
+```
+
+<Tip>
+  This formula is preferred over `(indiceInicio + indiceFin) / 2` because it prevents potential integer overflow when dealing with large indices.
+</Tip>
+
+### Recursive Division
+
+From `MergeSort.java:23-44`, the recursive method handles the division:
+
+```java
+private static void mergeSortReordenamiento(int[] originalArreglo, int[] depositoArreglo, 
+        int indiceInicio, int indiceFin) {
+    
+    if (indiceInicio >= indiceFin) {
+        return;  // Base case: single element is already sorted
+    }
+    
+    int mitadArreglo = indiceInicio + (indiceFin - indiceInicio) / 2;
+    
+    // Recursively sort left half
+    mergeSortReordenamiento(originalArreglo, depositoArreglo, indiceInicio, mitadArreglo);
+    
+    // Recursively sort right half
+    mergeSortReordenamiento(originalArreglo, depositoArreglo, mitadArreglo + 1, indiceFin);
+    
+    // Merge the sorted halves
+    merge(originalArreglo, depositoArreglo, indiceInicio, mitadArreglo, indiceFin);
+}
+```
+
+<Steps>
+  <Step title="Base Case Check">
+    If `indiceInicio >= indiceFin`, the subarray has 0 or 1 elements and is already sorted
+  </Step>
+  
+  <Step title="Calculate Midpoint">
+    Find the middle index to split the array into two halves
+  </Step>
+  
+  <Step title="Sort Left Half">
+    Recursively call the method on the left portion `[indiceInicio, mitadArreglo]`
+  </Step>
+  
+  <Step title="Sort Right Half">
+    Recursively call the method on the right portion `[mitadArreglo + 1, indiceFin]`
+  </Step>
+  
+  <Step title="Merge Results">
+    Combine the two sorted halves using the merge function
+  </Step>
+</Steps>
+
+## Phase 2: The Merge Phase
+
+After dividing, the algorithm merges sorted subarrays back together. This is where the actual sorting happens.
+
+### Visual Example
+
+Let's trace through the example array from `MergeSort.java:108`:
+
+```
+Original: [10, 5, 8, 9, 2, 3, 1, 6]
+
+Divide:
+[10, 5, 8, 9]  [2, 3, 1, 6]
+[10, 5]  [8, 9]  [2, 3]  [1, 6]
+[10] [5] [8] [9] [2] [3] [1] [6]
+
+Merge:
+[5, 10]  [8, 9]  [2, 3]  [1, 6]
+[5, 8, 9, 10]  [1, 2, 3, 6]
+[1, 2, 3, 5, 6, 8, 9, 10]
+```
+
+### The Merge Process
+
+The `merge()` method from `MergeSort.java:54-103` combines two sorted subarrays:
+
+```java
+private static void merge(int[] originalArreglo, int[] depositoArreglo, 
+        int indiceInicio, int mitadArreglo, int indiceFin) {
+    
+    // Copy current section to temporary array
+    for (int i = indiceInicio; i <= indiceFin; i++) {
+        depositoArreglo[i] = originalArreglo[i];
+    }
+    
+    int contadorPrimerArreglo = indiceInicio;      // Left half pointer
+    int contadorSegundoArreglo = mitadArreglo + 1;  // Right half pointer
+    int acompladorArreglos = indiceInicio;          // Output pointer
+    
+    // Compare and merge
+    while (contadorPrimerArreglo <= mitadArreglo && 
+           contadorSegundoArreglo <= indiceFin) {
+        
+        if (depositoArreglo[contadorPrimerArreglo] <= 
+            depositoArreglo[contadorSegundoArreglo]) {
+            originalArreglo[acompladorArreglos] = depositoArreglo[contadorPrimerArreglo];
+            contadorPrimerArreglo++;
+        } else {
+            originalArreglo[acompladorArreglos] = depositoArreglo[contadorSegundoArreglo];
+            contadorSegundoArreglo++;
+        }
+        acompladorArreglos++;
+    }
+    
+    // Copy remaining elements from left half (if any)
+    while (contadorPrimerArreglo <= mitadArreglo) {
+        originalArreglo[acompladorArreglos] = depositoArreglo[contadorPrimerArreglo];
+        contadorPrimerArreglo++;
+        acompladorArreglos++;
+    }
+}
+```
+
+<Steps>
+  <Step title="Copy to Temporary Array">
+    Copy the current section from the original array to the temporary array (`depositoArreglo`)
+  </Step>
+  
+  <Step title="Initialize Pointers">
+    - `contadorPrimerArreglo`: points to the start of the left half
+    - `contadorSegundoArreglo`: points to the start of the right half
+    - `acompladorArreglos`: points to where we write in the original array
+  </Step>
+  
+  <Step title="Compare and Merge">
+    Compare elements from both halves and place the smaller one into the original array
+  </Step>
+  
+  <Step title="Copy Remaining Elements">
+    If the left half has remaining elements, copy them (right half elements are already in place)
+  </Step>
+</Steps>
+
+## Detailed Merge Example
+
+Let's merge two sorted subarrays: `[5, 10]` and `[8, 9]`
+
+```
+Step 1: Copy to temporary array
+depositoArreglo: [5, 10, 8, 9]
+
+Step 2: Initialize pointers
+Left pointer (contadorPrimerArreglo) → 5
+Right pointer (contadorSegundoArreglo) → 8
+Output pointer (acompladorArreglos) → position 0
+
+Step 3: Compare and merge
+Compare 5 vs 8 → 5 is smaller
+  originalArreglo[0] = 5
+  Move left pointer → 10
+  Move output pointer → position 1
+
+Compare 10 vs 8 → 8 is smaller
+  originalArreglo[1] = 8
+  Move right pointer → 9
+  Move output pointer → position 2
+
+Compare 10 vs 9 → 9 is smaller
+  originalArreglo[2] = 9
+  Move right pointer → (exhausted)
+  Move output pointer → position 3
+
+Step 4: Copy remaining
+Left half has 10 remaining
+  originalArreglo[3] = 10
+
+Result: [5, 8, 9, 10]
+```
+
+<Note>
+  The algorithm only needs to check for remaining elements in the left half. Elements in the right half are already in their correct positions in the original array.
+</Note>
+
+## Entry Point and Validation
+
+The public `mergeSort()` method at `MergeSort.java:6-21` serves as the entry point:
+
+```java
+public static void mergeSort(int[] arreglo) {
+    if (arreglo == null || arreglo.length <= 1) {
+        return;  // Already sorted or invalid
+    }
+    
+    int[] depositoArreglo = new int[arreglo.length];
+    mergeSortReordenamiento(arreglo, depositoArreglo, 0, arreglo.length - 1);
+}
+```
+
+<Steps>
+  <Step title="Input Validation">
+    Check if the array is null or has 0-1 elements (already sorted)
+  </Step>
+  
+  <Step title="Create Temporary Array">
+    Allocate auxiliary space equal to the input array size
+  </Step>
+  
+  <Step title="Initiate Sorting">
+    Call the recursive method with the full array range
+  </Step>
+</Steps>
+
+## Recursion Tree Visualization
+
+For the array `[10, 5, 8, 9, 2, 3, 1, 6]`, the recursion forms this tree:
+
+```
+                [10,5,8,9,2,3,1,6]
+                       /  \
+            [10,5,8,9]      [2,3,1,6]
+              /    \          /    \
+          [10,5]  [8,9]    [2,3]  [1,6]
+           / \     / \      / \    / \
+        [10] [5] [8] [9] [2] [3] [1] [6]
+           \ /     \ /      \ /    \ /
+          [5,10]  [8,9]    [2,3]  [1,6]
+              \    /          \    /
+            [5,8,9,10]      [1,2,3,6]
+                       \  /
+                [1,2,3,5,6,8,9,10]
+```
+
+<Info>
+  The tree height is log₂(n), which is why the time complexity involves a logarithmic factor.
+</Info>
+
+## Key Implementation Details
+
+### Stability
+
+The algorithm is **stable** because of this comparison at `MergeSort.java:76`:
+
+```java
+if (depositoArreglo[contadorPrimerArreglo] <= depositoArreglo[contadorSegundoArreglo])
+```
+
+The `<=` operator ensures that when elements are equal, the one from the left subarray (which appeared first originally) is placed first.
+
+### In-Place vs Out-of-Place
+
+This implementation is **out-of-place** because it uses a temporary array:
+
+```java
+int[] depositoArreglo = new int[arreglo.length];
+```
+
+This requires O(n) additional space but simplifies the merging logic.
+
+<Warning>
+  The temporary array is allocated once at the start and reused throughout all recursive calls, which is more efficient than allocating new arrays at each level.
+</Warning>
+
+## Try It Yourself
+
+The main method at `MergeSort.java:105-139` provides a working example:
+
+```java
+int[] originalArreglo = {10, 5, 8, 9, 2, 3, 1, 6};
+mergeSort(originalArreglo);
+
+for (int num : originalArreglo) {
+    System.out.print(num + " ");
+}
+```
+
+Run this to see the algorithm in action, including the debug output showing each merge step!
+
+<Tip>
+  Uncomment the code at lines 117-138 to test with randomly generated arrays of varying sizes.
+</Tip>
+
+## Next Steps
+
+<Card title="Complexity Analysis" icon="chart-bar" href="/algorithm/complexity">
+  Learn about the time and space complexity of this implementation
+</Card>

@@ -1,0 +1,124 @@
+---
+title: 'Merge Sort Overview'
+description: 'Understanding the merge sort algorithm and its divide-and-conquer approach'
+---
+
+## What is Merge Sort?
+
+Merge Sort is a **divide-and-conquer** sorting algorithm that efficiently sorts arrays by recursively dividing them into smaller subarrays, sorting those subarrays, and then merging them back together in sorted order.
+
+This implementation provides a stable, predictable sorting solution that guarantees O(n log n) time complexity regardless of the input data.
+
+<Info>
+  Merge Sort was invented by John von Neumann in 1945 and remains one of the most efficient general-purpose sorting algorithms.
+</Info>
+
+## Core Principles
+
+### Divide-and-Conquer Strategy
+
+Merge Sort follows three fundamental steps:
+
+<Steps>
+  <Step title="Divide">
+    Split the array into two equal halves until each subarray contains only one element
+  </Step>
+  
+  <Step title="Conquer">
+    Recursively sort each half by continuing to divide them further
+  </Step>
+  
+  <Step title="Merge">
+    Combine the sorted halves back together in the correct order
+  </Step>
+</Steps>
+
+### Key Characteristics
+
+<CardGroup cols={2}>
+  <Card title="Stable Sorting" icon="balance-scale">
+    Preserves the relative order of equal elements
+  </Card>
+  
+  <Card title="Predictable Performance" icon="chart-line">
+    Always O(n log n) regardless of input
+  </Card>
+  
+  <Card title="Recursive Algorithm" icon="arrows-split-up-and-left">
+    Uses recursion to divide and conquer
+  </Card>
+  
+  <Card title="External Sorting" icon="database">
+    Excellent for sorting large datasets that don't fit in memory
+  </Card>
+</CardGroup>
+
+## When to Use Merge Sort
+
+### Ideal Use Cases
+
+<Check>**Guaranteed Performance**: When you need consistent O(n log n) performance</Check>
+<Check>**Stable Sorting**: When maintaining the order of equal elements matters</Check>
+<Check>**Large Datasets**: When sorting data too large for memory (external sorting)</Check>
+<Check>**Linked Lists**: Particularly efficient for sorting linked list structures</Check>
+
+### When to Consider Alternatives
+
+<Warning>
+  Merge Sort requires O(n) additional space for the temporary array, which may be a concern for memory-constrained environments.
+</Warning>
+
+- **Small arrays**: QuickSort or Insertion Sort may be faster
+- **Memory constraints**: In-place algorithms like HeapSort use less space
+- **Nearly sorted data**: Adaptive algorithms like TimSort can be more efficient
+
+## Implementation Approach
+
+This project implements Merge Sort with the following structure:
+
+```java
+public static void mergeSort(int[] arreglo) {
+    if (arreglo == null || arreglo.length <= 1) {
+        return;
+    }
+    
+    int[] depositoArreglo = new int[arreglo.length];
+    mergeSortReordenamiento(arreglo, depositoArreglo, 0, arreglo.length - 1);
+}
+```
+
+<Note>
+  The implementation uses a separate temporary array (`depositoArreglo`) to facilitate the merging process, following the classical merge sort approach.
+</Note>
+
+### Method Structure
+
+1. **`mergeSort()`** - Public entry point that validates input and initializes the temporary array
+2. **`mergeSortReordenamiento()`** - Recursive method that divides the array
+3. **`merge()`** - Combines two sorted subarrays into one
+
+## Real-World Applications
+
+Merge Sort is used in:
+
+- **Database Systems**: Sorting large datasets that don't fit in memory
+- **External Sorting**: Processing files larger than available RAM
+- **Parallel Processing**: The divide-and-conquer approach lends itself well to parallelization
+- **Java's Arrays.sort()**: For object arrays (stable sort requirement)
+- **Version Control Systems**: Merging sorted lists of changes
+
+<Tip>
+  Understanding Merge Sort helps you grasp fundamental computer science concepts like recursion, divide-and-conquer, and time-space tradeoffs.
+</Tip>
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="How It Works" icon="gears" href="/algorithm/how-it-works">
+    Detailed step-by-step breakdown of the algorithm
+  </Card>
+  
+  <Card title="Complexity Analysis" icon="chart-bar" href="/algorithm/complexity">
+    Time and space complexity analysis
+  </Card>
+</CardGroup>

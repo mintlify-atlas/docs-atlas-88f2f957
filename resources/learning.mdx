@@ -1,0 +1,294 @@
+---
+title: 'Learning Resources'
+description: 'Comprehensive learning materials, tutorials, and practice problems for mastering merge sort'
+icon: 'book-open'
+---
+
+## Understanding Merge Sort
+
+Merge sort is a divide-and-conquer algorithm that divides an array into smaller subarrays, sorts them, and merges them back together. This page provides resources to help you master this fundamental sorting algorithm.
+
+<Tip>
+  The key to understanding merge sort is recognizing its two main phases:
+  1. **Divide**: Recursively split the array into halves until you have single elements
+  2. **Conquer**: Merge sorted subarrays back together in sorted order
+</Tip>
+
+## Core Concepts to Master
+
+<CardGroup cols={2}>
+  <Card title="Divide and Conquer" icon="split">
+    Understanding how problems are broken down into smaller, manageable subproblems that are easier to solve
+  </Card>
+  
+  <Card title="Recursion" icon="rotate">
+    How merge sort calls itself to sort smaller portions of the array until reaching the base case
+  </Card>
+  
+  <Card title="Merging Process" icon="merge">
+    The crucial step of combining two sorted arrays into a single sorted array efficiently
+  </Card>
+  
+  <Card title="Space Complexity" icon="memory">
+    Why merge sort requires O(n) additional space for the temporary array during merging
+  </Card>
+</CardGroup>
+
+## Step-by-Step Learning Path
+
+<Accordion title="Step 1: Understand the Algorithm Flow">
+  Start by tracing through a small example by hand:
+  
+  **Example**: Sort [38, 27, 43, 3]
+  
+  1. **Initial array**: [38, 27, 43, 3]
+  2. **First split**: [38, 27] and [43, 3]
+  3. **Second split**: [38], [27], [43], [3]
+  4. **First merge**: [27, 38] and [3, 43]
+  5. **Final merge**: [3, 27, 38, 43]
+  
+  <Tip>
+    Draw this as a tree diagram to visualize how the array is divided and merged back together.
+  </Tip>
+</Accordion>
+
+<Accordion title="Step 2: Analyze the Code Structure">
+  In the MergeSort.java implementation, notice three key methods:
+  
+  - **`mergeSort()`**: Entry point that creates the temporary array
+  - **`mergeSortReordenamiento()`**: Recursive method that divides the array
+  - **`merge()`**: Combines two sorted subarrays
+  
+  Study each method individually before understanding how they work together.
+</Accordion>
+
+<Accordion title="Step 3: Trace the Recursion">
+  Follow the recursive calls with a small array:
+  
+  ```java
+  int[] arr = {5, 2, 8, 1};
+  ```
+  
+  Track:
+  - What are `indiceInicio` and `indiceFin` at each call?
+  - What is `mitadArreglo` calculated as?
+  - In what order do the recursive calls execute?
+  - When does each merge operation happen?
+  
+  <Tip>
+    Use a debugger or add print statements to see the execution order. The implementation already includes helpful output showing the sorting process.
+  </Tip>
+</Accordion>
+
+<Accordion title="Step 4: Master the Merge Operation">
+  The merge operation is the heart of merge sort. Understanding this is crucial:
+  
+  **Key points**:
+  - Two sorted subarrays are compared element by element
+  - The smaller element is placed in the original array
+  - Pointers track positions in both subarrays
+  - After one subarray is exhausted, remaining elements are copied
+  
+  **Practice**: Write the merge function on paper with arrays [1, 5, 9] and [2, 6, 8]
+</Accordion>
+
+<Accordion title="Step 5: Analyze Time and Space Complexity">
+  **Time Complexity**: O(n log n)
+  - **Division**: log n levels (splitting array in half each time)
+  - **Merging**: O(n) work at each level (touching every element)
+  - **Total**: O(n) × log n = O(n log n)
+  
+  **Space Complexity**: O(n)
+  - Requires auxiliary array for merging
+  - Recursion stack space: O(log n)
+  
+  <Tip>
+    Merge sort's consistent O(n log n) performance makes it reliable for worst-case scenarios, unlike quicksort which can degrade to O(n²).
+  </Tip>
+</Accordion>
+
+## Practice Problems
+
+### Beginner Level
+
+<CardGroup cols={2}>
+  <Card title="Problem 1: Trace Execution" icon="1">
+    **Task**: Manually trace merge sort on [64, 25, 12, 22, 11]
+    
+    Draw the complete recursion tree showing:
+    - All division steps
+    - All merge operations
+    - Final sorted array
+  </Card>
+  
+  <Card title="Problem 2: Count Operations" icon="2">
+    **Task**: For an array of 8 elements, count:
+    - Number of recursive calls
+    - Number of merge operations
+    - Total comparisons made
+  </Card>
+  
+  <Card title="Problem 3: Modify for Descending" icon="3">
+    **Task**: Modify the merge function to sort in descending order
+    
+    **Hint**: Change the comparison in line 76 of MergeSort.java
+  </Card>
+  
+  <Card title="Problem 4: Debug the Code" icon="4">
+    **Task**: Add comprehensive print statements to show:
+    - When each subarray is divided
+    - What elements are being merged
+    - The state of the array after each merge
+  </Card>
+</CardGroup>
+
+### Intermediate Level
+
+<CardGroup cols={2}>
+  <Card title="Problem 5: Count Inversions" icon="5">
+    **Task**: Modify merge sort to count inversions (pairs where i < j but arr[i] > arr[j])
+    
+    **Use case**: Measuring how "unsorted" an array is
+  </Card>
+  
+  <Card title="Problem 6: Merge K Sorted Arrays" icon="6">
+    **Task**: Extend the concept to merge k sorted arrays efficiently
+    
+    **Hint**: Use a min-heap or divide-and-conquer approach
+  </Card>
+  
+  <Card title="Problem 7: External Merge Sort" icon="7">
+    **Task**: Implement merge sort for data that doesn't fit in memory
+    
+    **Scenario**: Sorting a 10GB file with only 1GB of RAM
+  </Card>
+  
+  <Card title="Problem 8: Iterative Version" icon="8">
+    **Task**: Implement merge sort without recursion
+    
+    **Approach**: Use iteration to merge subarrays of increasing sizes (1, 2, 4, 8...)
+  </Card>
+</CardGroup>
+
+### Advanced Level
+
+<CardGroup cols={2}>
+  <Card title="Problem 9: In-Place Merge Sort" icon="9">
+    **Task**: Implement merge sort with O(1) extra space
+    
+    **Challenge**: This is much more complex and slower, but space-efficient
+  </Card>
+  
+  <Card title="Problem 10: Parallel Merge Sort" icon="star">
+    **Task**: Implement a multi-threaded version using Java's Fork/Join framework
+    
+    **Goal**: Exploit multiple cores for faster sorting of large arrays
+  </Card>
+</CardGroup>
+
+## Hands-On Exercises
+
+### Exercise 1: Visualize with Different Inputs
+
+Run the MergeSort.java implementation with various inputs:
+
+```java
+// Already sorted
+int[] sorted = {1, 2, 3, 4, 5};
+
+// Reverse sorted (worst case for some algorithms)
+int[] reverse = {5, 4, 3, 2, 1};
+
+// All same elements
+int[] same = {5, 5, 5, 5, 5};
+
+// Random
+int[] random = {3, 7, 1, 9, 2};
+```
+
+<Tip>
+  Notice how merge sort performs consistently across all these cases. The number of operations remains O(n log n) regardless of initial order.
+</Tip>
+
+### Exercise 2: Compare with Other Algorithms
+
+Implement bubble sort or insertion sort and compare:
+- Execution time for arrays of size 100, 1000, 10000
+- Number of comparisons
+- Code complexity
+
+### Exercise 3: Optimize the Implementation
+
+Try these optimizations:
+1. **Small subarray cutoff**: Switch to insertion sort for subarrays smaller than 10-15 elements
+2. **Check if already sorted**: If the largest element in the first half ≤ smallest element in second half, skip merge
+3. **Eliminate copy**: Alternate between original and auxiliary array to avoid copying
+
+## Recommended External Resources
+
+<CardGroup cols={2}>
+  <Card title="Visualizations" icon="eye" href="https://visualgo.net/en/sorting">
+    Interactive animations showing merge sort step-by-step
+  </Card>
+  
+  <Card title="MIT OpenCourseWare" icon="graduation-cap" href="https://ocw.mit.edu/courses/6-006-introduction-to-algorithms-fall-2011/">
+    Lecture videos covering merge sort and divide-and-conquer
+  </Card>
+  
+  <Card title="LeetCode Practice" icon="code" href="https://leetcode.com/tag/merge-sort/">
+    Problems tagged with merge sort for practice
+  </Card>
+  
+  <Card title="Algorithm Analysis" icon="chart-line" href="https://www.bigocheatsheet.com/">
+    Big-O complexity reference for comparing algorithms
+  </Card>
+</CardGroup>
+
+## Common Mistakes to Avoid
+
+<Warning>
+  **Mistake 1: Off-by-one errors**
+  
+  Carefully track whether indices are inclusive or exclusive. In this implementation:
+  - `indiceFin` is inclusive (the last element to sort)
+  - `mitadArreglo + 1` starts the second half
+</Warning>
+
+<Warning>
+  **Mistake 2: Not copying to temporary array**
+  
+  The merge operation needs to compare elements from both halves. Without copying to `depositoArreglo` first, you'd overwrite elements you still need to compare.
+</Warning>
+
+<Warning>
+  **Mistake 3: Forgetting remaining elements**
+  
+  After one subarray is exhausted, don't forget to copy remaining elements from the other subarray. This implementation handles the left half (lines 96-102), but the right half doesn't need explicit copying since it's already in the correct position.
+</Warning>
+
+## Testing Your Understanding
+
+Before moving on, ensure you can answer:
+
+1. Why is merge sort O(n log n) in all cases?
+2. When would you prefer merge sort over quicksort?
+3. How does the space complexity compare to in-place algorithms?
+4. Can you explain why merge sort is stable (preserves relative order of equal elements)?
+5. What happens if you try to sort a null or empty array in this implementation?
+
+<Tip>
+  Check the validation in `mergeSort()` method (line 7-10) to see how edge cases are handled.
+</Tip>
+
+## Next Steps
+
+Once you're comfortable with merge sort:
+1. Study related algorithms like [quicksort and heapsort](/resources/related-algorithms)
+2. Learn about stability in sorting algorithms
+3. Explore when to use merge sort in real applications
+4. Understand external sorting for large datasets
+5. Study parallel sorting algorithms
+
+<Card title="Ready to Compare?" icon="scale-balanced" href="/resources/related-algorithms">
+  Learn when to use merge sort versus other sorting algorithms
+</Card>

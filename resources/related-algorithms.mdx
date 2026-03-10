@@ -1,0 +1,453 @@
+---
+title: 'Related Algorithms'
+description: 'Compare merge sort with other sorting algorithms and learn when to use each one'
+icon: 'chart-simple'
+---
+
+## Sorting Algorithm Comparison
+
+While merge sort is an excellent sorting algorithm, it's important to understand how it compares to other algorithms and when to choose each one. This guide compares merge sort with other common sorting algorithms.
+
+<Tip>
+  No single sorting algorithm is "best" for all situations. The optimal choice depends on:
+  - Input size
+  - Data characteristics (nearly sorted, random, reverse sorted)
+  - Memory constraints
+  - Stability requirements
+  - Implementation complexity
+</Tip>
+
+## Complexity Comparison Table
+
+| Algorithm | Best Case | Average Case | Worst Case | Space | Stable | In-Place |
+|-----------|-----------|--------------|------------|-------|--------|----------|
+| **Merge Sort** | O(n log n) | O(n log n) | O(n log n) | O(n) | Yes | No |
+| Quick Sort | O(n log n) | O(n log n) | O(n²) | O(log n) | No | Yes |
+| Heap Sort | O(n log n) | O(n log n) | O(n log n) | O(1) | No | Yes |
+| Insertion Sort | O(n) | O(n²) | O(n²) | O(1) | Yes | Yes |
+| Bubble Sort | O(n) | O(n²) | O(n²) | O(1) | Yes | Yes |
+| Selection Sort | O(n²) | O(n²) | O(n²) | O(1) | No | Yes |
+| Tim Sort | O(n) | O(n log n) | O(n log n) | O(n) | Yes | No |
+| Counting Sort | O(n+k) | O(n+k) | O(n+k) | O(k) | Yes | No |
+
+<Note>
+  k represents the range of input values for counting sort
+</Note>
+
+## Detailed Algorithm Comparisons
+
+### Quick Sort
+
+<CardGroup cols={2}>
+  <Card title="How It Works" icon="bolt">
+    - **Strategy**: Divide and conquer (like merge sort)
+    - **Partitioning**: Choose a pivot, partition array into elements less than and greater than pivot
+    - **Recursion**: Recursively sort the partitions
+    - **Difference**: Does the work during division (partitioning), not merging
+  </Card>
+  
+  <Card title="Performance Characteristics" icon="gauge">
+    - **Average**: O(n log n) - very fast in practice
+    - **Worst**: O(n²) - when pivot choices are poor (already sorted)
+    - **Space**: O(log n) - recursion stack only
+    - **Cache-friendly**: Better locality than merge sort
+  </Card>
+</CardGroup>
+
+#### When to Use Quick Sort
+
+<Accordion title="Advantages over Merge Sort">
+  ✅ **Better space efficiency**: Only O(log n) extra space vs O(n)
+  
+  ✅ **Faster in practice**: Despite same average complexity, quicksort has lower constant factors
+  
+  ✅ **In-place sorting**: Modifies array directly without needing auxiliary storage
+  
+  ✅ **Cache-friendly**: Better memory locality leads to faster real-world performance
+</Accordion>
+
+<Accordion title="Disadvantages vs Merge Sort">
+  ❌ **Unstable**: May change relative order of equal elements
+  
+  ❌ **Worst-case O(n²)**: Can degrade to quadratic time with poor pivot selection
+  
+  ❌ **Not ideal for linked lists**: Random access required for efficient partitioning
+  
+  ❌ **Unpredictable performance**: Performance varies with input characteristics
+</Accordion>
+
+#### Quick Sort Implementation Sketch
+
+```java
+public static void quickSort(int[] arr, int low, int high) {
+    if (low < high) {
+        int pivotIndex = partition(arr, low, high);
+        quickSort(arr, low, pivotIndex - 1);
+        quickSort(arr, pivotIndex + 1, high);
+    }
+}
+
+private static int partition(int[] arr, int low, int high) {
+    int pivot = arr[high];
+    int i = low - 1;
+    
+    for (int j = low; j < high; j++) {
+        if (arr[j] <= pivot) {
+            i++;
+            swap(arr, i, j);
+        }
+    }
+    swap(arr, i + 1, high);
+    return i + 1;
+}
+```
+
+<Tip>
+  **Pro tip**: Use "median-of-three" pivot selection (median of first, middle, last elements) to avoid worst-case performance on sorted data.
+</Tip>
+
+### Heap Sort
+
+<CardGroup cols={2}>
+  <Card title="How It Works" icon="tree">
+    - **Strategy**: Selection-based using a heap data structure
+    - **Build heap**: Convert array to max-heap (O(n))
+    - **Extract max**: Repeatedly remove largest element and rebuild heap
+    - **Result**: Elements extracted in descending order
+  </Card>
+  
+  <Card title="Performance Characteristics" icon="gauge">
+    - **All cases**: O(n log n) - consistent like merge sort
+    - **Space**: O(1) - sorts in place
+    - **Not stable**: Equal elements may be reordered
+    - **Poor cache performance**: Heap operations jump around memory
+  </Card>
+</CardGroup>
+
+#### When to Use Heap Sort
+
+<Accordion title="Advantages over Merge Sort">
+  ✅ **Minimal space**: O(1) extra space - ideal for memory-constrained systems
+  
+  ✅ **Guaranteed O(n log n)**: No worst-case degradation like quicksort
+  
+  ✅ **In-place**: No auxiliary array needed
+  
+  ✅ **Predictable**: Consistent performance regardless of input
+</Accordion>
+
+<Accordion title="Disadvantages vs Merge Sort">
+  ❌ **Not stable**: Cannot preserve relative order
+  
+  ❌ **Slower in practice**: Poor cache locality, higher constant factors
+  
+  ❌ **Complex implementation**: Heap operations are trickier than merging
+  
+  ❌ **Not adaptive**: Doesn't benefit from partially sorted input
+</Accordion>
+
+<Note>
+  **Use case**: Heap sort shines when memory is extremely limited and you need guaranteed O(n log n) performance. It's also the foundation for priority queue implementations.
+</Note>
+
+### Insertion Sort
+
+<CardGroup cols={2}>
+  <Card title="How It Works" icon="arrow-right">
+    - **Strategy**: Build sorted array one element at a time
+    - **Process**: Take each element, insert it into correct position in sorted portion
+    - **Simple**: Most intuitive sorting algorithm
+    - **Efficient for small arrays**: Low overhead
+  </Card>
+  
+  <Card title="Performance Characteristics" icon="gauge">
+    - **Best**: O(n) - already sorted input
+    - **Average/Worst**: O(n²) - quadratic comparisons
+    - **Space**: O(1) - minimal overhead
+    - **Adaptive**: Exploits existing order
+  </Card>
+</CardGroup>
+
+#### When to Use Insertion Sort
+
+<Accordion title="When Insertion Sort Beats Merge Sort">
+  ✅ **Small arrays**: Faster than merge sort for n < 10-20 due to lower overhead
+  
+  ✅ **Nearly sorted data**: O(n) best case when data is almost sorted
+  
+  ✅ **Online algorithm**: Can sort data as it arrives
+  
+  ✅ **Simple implementation**: Easy to code and debug
+  
+  ✅ **Stable and in-place**: Both properties simultaneously
+</Accordion>
+
+<Tip>
+  **Hybrid approach**: Many optimized merge sort implementations switch to insertion sort for subarrays smaller than 10-15 elements. This combines the strengths of both algorithms.
+</Tip>
+
+```java
+private static void mergeSortOptimized(int[] arr, int[] temp, int left, int right) {
+    if (right - left < 10) {
+        // Use insertion sort for small subarrays
+        insertionSort(arr, left, right);
+        return;
+    }
+    // Otherwise use merge sort
+    int mid = left + (right - left) / 2;
+    mergeSortOptimized(arr, temp, left, mid);
+    mergeSortOptimized(arr, temp, mid + 1, right);
+    merge(arr, temp, left, mid, right);
+}
+```
+
+### Tim Sort
+
+<CardGroup cols={2}>
+  <Card title="How It Works" icon="brain">
+    - **Strategy**: Hybrid of merge sort and insertion sort
+    - **Runs**: Identifies naturally occurring sorted sequences
+    - **Merge runs**: Uses merge sort to combine runs
+    - **Smart**: Exploits patterns in real-world data
+  </Card>
+  
+  <Card title="Performance Characteristics" icon="gauge">
+    - **Best**: O(n) - highly ordered data
+    - **Average/Worst**: O(n log n)
+    - **Space**: O(n)
+    - **Real-world champion**: Python and Java's default sort
+  </Card>
+</CardGroup>
+
+<Note>
+  **Fun fact**: Tim Sort is named after Tim Peters, who created it in 2002. It's been the default sorting algorithm in Python since 2.3 and Java since JDK 7.
+</Note>
+
+#### Why Tim Sort Matters
+
+<Accordion title="Advantages over Basic Merge Sort">
+  ✅ **Adaptive**: Detects and exploits existing order in data
+  
+  ✅ **Real-world optimized**: Excellent performance on partially sorted data
+  
+  ✅ **Stable**: Preserves order like merge sort
+  
+  ✅ **Best of both worlds**: Combines merge sort's reliability with insertion sort's efficiency on small/sorted data
+</Accordion>
+
+### Counting Sort and Radix Sort
+
+<Card title="Non-Comparison Sorts" icon="hash">
+  These algorithms don't compare elements - they use properties of the data:
+  
+  **Counting Sort**:
+  - Works when elements are integers in a known range
+  - Counts occurrences of each value
+  - Time: O(n + k) where k is the range
+  - Space: O(k) for count array
+  
+  **Radix Sort**:
+  - Sorts by processing individual digits/bytes
+  - Uses counting sort as a subroutine
+  - Time: O(d × (n + k)) where d is number of digits
+  - Can sort integers faster than O(n log n)
+</Card>
+
+<Warning>
+  These algorithms only work for specific data types (integers, strings with fixed-length keys). They're not general-purpose like merge sort.
+</Warning>
+
+## Decision Guide: Which Algorithm to Use?
+
+### Use Merge Sort When:
+
+<CardGroup cols={2}>
+  <Card title="Stability Required" icon="check">
+    You need to preserve the relative order of equal elements (e.g., sorting by multiple keys)
+  </Card>
+  
+  <Card title="Predictable Performance" icon="clock">
+    You need guaranteed O(n log n) worst-case performance (real-time systems, competitive programming)
+  </Card>
+  
+  <Card title="Linked Lists" icon="link">
+    Sorting linked lists where merge sort can be done with O(1) space by rearranging pointers
+  </Card>
+  
+  <Card title="External Sorting" icon="database">
+    Sorting data that doesn't fit in memory (files, databases) - merge sort handles this naturally
+  </Card>
+</CardGroup>
+
+### Use Quick Sort When:
+
+<CardGroup cols={2}>
+  <Card title="Average Case Priority" icon="bolt">
+    Average-case performance matters more than worst-case, and you have good pivot selection
+  </Card>
+  
+  <Card title="Memory Constrained" icon="memory">
+    Limited memory available and you need efficient in-place sorting
+  </Card>
+  
+  <Card title="Arrays" icon="table">
+    Working with arrays where random access is fast
+  </Card>
+  
+  <Card title="General Purpose" icon="star">
+    Most general-purpose sorting when stability isn't required
+  </Card>
+</CardGroup>
+
+### Use Heap Sort When:
+
+<CardGroup cols={2}>
+  <Card title="Space Critical" icon="microchip">
+    Absolute minimum memory usage required (embedded systems)
+  </Card>
+  
+  <Card title="Guaranteed Performance" icon="shield">
+    Need O(n log n) worst-case with O(1) space
+  </Card>
+  
+  <Card title="Priority Queues" icon="list-ol">
+    Building a priority queue or selection algorithm
+  </Card>
+  
+  <Card title="Partial Sorting" icon="filter">
+    Finding top-k elements (heap select)
+  </Card>
+</CardGroup>
+
+### Use Insertion Sort When:
+
+<CardGroup cols={2}>
+  <Card title="Small Data" icon="magnifying-glass">
+    Sorting small arrays (n < 20) or as a subroutine in hybrid algorithms
+  </Card>
+  
+  <Card title="Nearly Sorted" icon="arrow-up-short-wide">
+    Data is already mostly sorted
+  </Card>
+  
+  <Card title="Online Sorting" icon="rss">
+    Data arrives one item at a time and needs to stay sorted
+  </Card>
+  
+  <Card title="Simple Implementation" icon="code">
+    Simplicity and readability are top priorities
+  </Card>
+</CardGroup>
+
+## Practical Recommendations
+
+### For Learning
+
+<Card title="Study in This Order" icon="graduation-cap">
+  1. **Insertion Sort** - Understand basic sorting
+  2. **Merge Sort** - Learn divide-and-conquer and recursion
+  3. **Quick Sort** - Master partitioning and in-place algorithms
+  4. **Heap Sort** - Connect sorting to data structures
+  5. **Tim Sort** - See how algorithms are optimized for real-world use
+</Card>
+
+### For Production Code
+
+<CardGroup cols={2}>
+  <Card title="Use Built-in Sorts" icon="box">
+    In Java, use:
+    - `Arrays.sort()` for primitives (Dual-Pivot Quicksort)
+    - `Arrays.sort()` for objects (Tim Sort)
+    - `Collections.sort()` (Tim Sort)
+    
+    These are highly optimized and well-tested.
+  </Card>
+  
+  <Card title="Custom Implementations" icon="wrench">
+    Implement your own sorting only when:
+    - Educational purposes
+    - Specific domain requirements
+    - Optimizing for particular data patterns
+    - Research or competitive programming
+  </Card>
+</CardGroup>
+
+## Real-World Performance
+
+<Tip>
+  **Benchmarking results** for sorting 1 million random integers:
+  
+  - Quick Sort: ~50ms (fastest)
+  - Tim Sort: ~55ms (close second, stable)
+  - Merge Sort: ~65ms (consistent, stable)
+  - Heap Sort: ~85ms (memory-efficient)
+  - Insertion Sort: ~2,500ms (only for small arrays!)
+  
+  Note: Results vary by implementation, hardware, and data characteristics.
+</Tip>
+
+## Stability Matters
+
+<Accordion title="What is Stability?">
+  A sorting algorithm is **stable** if it preserves the relative order of elements with equal keys.
+  
+  **Example**: Sorting people by age
+  ```
+  Input:  [(Alice, 25), (Bob, 25), (Charlie, 23)]
+  
+  Stable sort:   [(Charlie, 23), (Alice, 25), (Bob, 25)]
+  Unstable sort: [(Charlie, 23), (Bob, 25), (Alice, 25)]  ❌ Alice and Bob swapped
+  ```
+</Accordion>
+
+<Accordion title="When Stability Matters">
+  **Stable algorithms**: Merge Sort, Tim Sort, Insertion Sort
+  
+  **Unstable algorithms**: Quick Sort, Heap Sort, Selection Sort
+  
+  **Use cases requiring stability**:
+  - Sorting by multiple keys (sort by age, then by name)
+  - Maintaining order from previous sorts
+  - Database query results
+  - Radix sort subroutines
+</Accordion>
+
+## Algorithm Selection Flowchart
+
+```
+Need to sort data?
+│
+├─ Small array (n < 20)?
+│  └─ Yes → Insertion Sort
+│
+├─ Stability required?
+│  ├─ Yes → Merge Sort or Tim Sort
+│  └─ No → Continue
+│
+├─ Memory extremely limited?
+│  ├─ Yes → Heap Sort
+│  └─ No → Continue
+│
+├─ Guaranteed O(n log n) required?
+│  ├─ Yes → Merge Sort or Heap Sort
+│  └─ No → Quick Sort (best average case)
+│
+└─ Linked list?
+   └─ Yes → Merge Sort
+```
+
+## Further Exploration
+
+<CardGroup cols={2}>
+  <Card title="Back to Learning Resources" icon="book-open" href="/resources/learning">
+    Practice problems and tutorials for mastering merge sort
+  </Card>
+  
+  <Card title="Algorithm Complexity" icon="chart-line" href="/algorithm/complexity">
+    Deep dive into time and space complexity analysis
+  </Card>
+</CardGroup>
+
+<Note>
+  **Remember**: The "best" algorithm depends on your specific context. Understanding the trade-offs helps you make informed decisions rather than blindly following rules.
+</Note>

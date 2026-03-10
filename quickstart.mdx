@@ -1,80 +1,197 @@
 ---
 title: "Quickstart"
-description: "Start building awesome documentation in minutes"
+description: "Get started with the MergeSort implementation in minutes"
 ---
 
-## Get started in three steps
+## Run Your First MergeSort
 
-Get your documentation site running locally and make your first customization.
+Get the MergeSort algorithm running on your machine and see it in action. This guide will walk you through compiling, running, and understanding the output.
 
-### Step 1: Set up your local environment
-
-<AccordionGroup>
-  <Accordion icon="copy" title="Clone your docs locally">
-    During the onboarding process, you created a GitHub repository with your docs content if you didn't already have one. You can find a link to this repository in your [dashboard](https://dashboard.mintlify.com).
+<Steps>
+  <Step title="Navigate to the source directory">
+    First, navigate to the directory containing `MergeSort.java`:
     
-    To clone the repository locally so that you can make and preview changes to your docs, follow the [Cloning a repository](https://docs.github.com/en/repositories/creating-and-managing-repositories/cloning-a-repository) guide in the GitHub docs.
-  </Accordion>
-  <Accordion icon="rectangle-terminal" title="Start the preview server">
-    1. Install the Mintlify CLI: `npm i -g mint`
-    2. Navigate to your docs directory and run: `mint dev`
-    3. Open `http://localhost:3000` to see your docs live!
+    ```bash
+    cd workspace/source
+    ```
+  </Step>
+
+  <Step title="Compile the program">
+    Compile the Java source file using `javac`:
     
-    <Tip>Your preview updates automatically as you edit files.</Tip>
-  </Accordion>
-</AccordionGroup>
-
-### Step 2: Deploy your changes
-
-<AccordionGroup>
-  <Accordion icon="github" title="Install our GitHub app">
-    Install the Mintlify GitHub app from your [dashboard](https://dashboard.mintlify.com/settings/organization/github-app).
+    ```bash
+    javac MergeSort.java
+    ```
     
-    Our GitHub app automatically deploys your changes to your docs site, so you don't need to manage deployments yourself.
-</Accordion>
-<Accordion icon="palette" title="Update your site name and colors">
-    For a first change, let's update the name and colors of your docs site.
+    <Note>
+      Make sure you have Java Development Kit (JDK) 8 or higher installed. Check your version with `java -version`.
+    </Note>
+    
+    This creates a `MergeSort.class` file containing the compiled bytecode.
+  </Step>
 
-    1. Open `docs.json` in your editor.
-    2. Change the `"name"` field to your project name.
-    3. Update the `"colors"` to match your brand.
-    4. Save and see your changes instantly at `http://localhost:3000`.
+  <Step title="Run the program">
+    Execute the compiled program:
+    
+    ```bash
+    java MergeSort
+    ```
+    
+    You'll see the algorithm process the array step by step!
+  </Step>
+</Steps>
 
-    <Tip>Try changing the primary color to see an immediate difference!</Tip>
-  </Accordion>
-</AccordionGroup>
+## Understanding the Output
 
-### Step 3: Go live
+When you run the program, you'll see detailed output showing how merge sort divides and conquers the array.
 
-<Accordion icon="rocket" title="Publish your docs">
-  1. Commit and push your changes.
-  2. Your docs will update and be live in moments!
-</Accordion>
+### Example Output
 
-## Next steps
+With the default array `{10, 5, 8, 9, 2, 3, 1, 6}`, you'll see:
 
-Now that you have your docs running, explore these key features:
-
-<CardGroup cols={2}>
-
-<Card title="Write Content" icon="pen-to-square" href="/essentials/markdown">
-  Learn MDX syntax and start writing your documentation.
-</Card>
-
-<Card title="Customize style" icon="palette" href="/essentials/settings">
-  Make your docs match your brand perfectly.
-</Card>
-
-<Card title="Add code examples" icon="square-code" href="/essentials/code">
-  Include syntax-highlighted code blocks.
-</Card>
-
-<Card title="API documentation" icon="code" href="/api-reference/introduction">
-  Auto-generate API docs from OpenAPI specs.
-</Card>
-
-</CardGroup>
+```
+Proceso de ordenamiento en subarreglo: 0 a 0
+10 
+Proceso de ordenamiento en subarreglo: 1 a 1
+5 
+Proceso de ordenamiento en subarreglo: 0 a 1
+5 10 
+Proceso de ordenamiento en subarreglo: 2 a 2
+8 
+Proceso de ordenamiento en subarreglo: 3 a 3
+9 
+Proceso de ordenamiento en subarreglo: 2 a 3
+8 9 
+Proceso de ordenamiento en subarreglo: 0 a 3
+5 8 9 10 
+...
+1 2 3 5 6 8 9 10
+```
 
 <Note>
-  **Need help?** See our [full documentation](https://mintlify.com/docs) or join our [community](https://mintlify.com/community).
+  Each line shows a subarray being sorted. Watch how smaller sorted subarrays merge into larger ones!
 </Note>
+
+## Modify the Input Array
+
+Want to try different arrays? Edit the `main` method in `MergeSort.java`:
+
+<CodeGroup>
+
+```java MergeSort.java
+public static void main(String[] args) {
+    // Try your own array!
+    int[] originalArreglo = {10, 5, 8, 9, 2, 3, 1, 6};
+    
+    mergeSort(originalArreglo);
+    
+    for (int num : originalArreglo) {
+        System.out.print(num + " ");
+    }       
+}
+```
+
+```java Custom Array Example
+public static void main(String[] args) {
+    // Sort a larger array
+    int[] originalArreglo = {64, 34, 25, 12, 22, 11, 90};
+    
+    mergeSort(originalArreglo);
+    
+    System.out.println("Final sorted array:");
+    for (int num : originalArreglo) {
+        System.out.print(num + " ");
+    }       
+}
+```
+
+```java Random Array Example
+public static void main(String[] args) {
+    Random numAzar = new Random();
+    int cantidadElementos = numAzar.nextInt(10) + 1;
+    int[] arreglo = new int[cantidadElementos];
+    
+    for (int i = 0; i < cantidadElementos; i++) {
+        arreglo[i] = numAzar.nextInt(100) + 1;
+    }
+
+    System.out.println("Arreglo original:");
+    for (int num : arreglo) {
+        System.out.print(num + " ");
+    }
+    System.out.println();
+
+    mergeSort(arreglo);
+
+    System.out.println("Arreglo ordenado:");
+    for (int num : arreglo) {
+        System.out.print(num + " ");
+    }
+}
+```
+
+</CodeGroup>
+
+<Tip>
+  The random array example is already in the source file as commented code. Just uncomment it to test with random values!
+</Tip>
+
+## Using the MergeSort Method
+
+The public `mergeSort()` method is the entry point for sorting any integer array.
+
+### Method Signature
+
+```java
+public static void mergeSort(int[] arreglo)
+```
+
+### Example Usage
+
+```java
+// Create an unsorted array
+int[] numbers = {42, 17, 93, 8, 56};
+
+// Sort it in-place
+mergeSort(numbers);
+
+// The array is now sorted: {8, 17, 42, 56, 93}
+```
+
+<Note>
+  The `mergeSort()` method sorts the array **in-place**, meaning it modifies the original array rather than returning a new one.
+</Note>
+
+## Key Features
+
+<CardGroup cols={2}>
+  <Card title="Edge Case Handling" icon="shield-check">
+    Automatically handles `null` arrays and single-element arrays without errors.
+  </Card>
+  
+  <Card title="Visual Process Output" icon="eye">
+    See each merge operation with detailed console output showing subarray progression.
+  </Card>
+  
+  <Card title="Efficient Algorithm" icon="gauge-high">
+    O(n log n) time complexity for optimal sorting performance on larger datasets.
+  </Card>
+  
+  <Card title="Educational Design" icon="book-open">
+    Detailed Spanish comments explain each step of the divide-and-conquer process.
+  </Card>
+</CardGroup>
+
+## Next Steps
+
+Now that you have MergeSort running, dive deeper into understanding the algorithm:
+
+<CardGroup cols={2}>
+  <Card title="Algorithm Overview" icon="diagram-project" href="/algorithm/overview">
+    Learn how the merge sort algorithm works under the hood
+  </Card>
+  <Card title="API Reference" icon="code" href="/implementation/api-reference">
+    Explore all methods and implementation details
+  </Card>
+</CardGroup>
+
